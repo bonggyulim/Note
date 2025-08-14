@@ -57,53 +57,62 @@ class HomeFragment : Fragment() {
             }
         }
 
-        observeNoteState()
         initView()
     }
 
-    private fun observeNoteState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.readAllNoteUiState.collect { uiState ->
-                when (uiState) {
-                    is UiState.Success -> {
-                        adapter.submitList(
-                            uiState.data.map { it.toModel() }
-                                .sortedByDescending { it.createdDate }
-                        ) {
-                            binding.rvNotes.layoutManager?.scrollToPosition(0)
-                        }
-
-                        binding.btnDate.setOnClickListener {
-                            adapter.submitList(
-                                uiState.data.map { it.toModel() }
-                                    .sortedByDescending { it.createdDate }
-                            ) {
-                                binding.rvNotes.layoutManager?.scrollToPosition(0)
-                            }
-                        }
-                        binding.btnAscending.setOnClickListener {
-                            adapter.submitList(
-                                uiState.data.map { it.toModel() }
-                                    .sortedBy { it.title }
-                            ) {
-                                binding.rvNotes.layoutManager?.scrollToPosition(0)
-                            }
-                        }
-                    }
-                    is UiState.Loading -> { /* 로딩 처리 */ }
-                    is UiState.Error -> { /* 에러 처리 */ }
-                }
-            }
+    override fun onStart() {
+        super.onStart()
+        viewModel.notes.observe(viewLifecycleOwner) { note ->
+            adapter.submitList(note)
         }
     }
 
     private fun initView() {
+        binding.rvNotes.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvNotes.adapter = adapter
+
+        adapter.editClick = object : NotesAdapter.EditClick {
+            override fun editClick(noteModel: NoteModel) {
+                val createFragment = CreateFragment().apply {
+                    arguments = bundleOf("note" to noteModel)
+                }
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.frameLayout, createFragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
+        adapter.deleteClick = object : NotesAdapter.DeleteClick {
+            override fun deleteClick(noteModel: NoteModel) {
+                viewModel.deleteNote(noteModel)
+            }
+        }
+
         binding.btnCreate.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayout, CreateFragment())
                 .addToBackStack(null)
                 .commit()
         }
+
+        binding.btnRe.setOnClickListener {
+            if (viewModel.sort) {
+                viewModel.getAllNoteAscending()
+            } else {
+                viewModel.getAllNote()
+            }
+        }
+
+        binding.btnDate.setOnClickListener {
+            viewModel.getAllNote()
+        }
+
+        binding.btnAscending.setOnClickListener {
+            viewModel.getAllNoteAscending()
+        }
+
+        viewModel.getAllNote()
     }
 
 

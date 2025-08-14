@@ -27,17 +27,7 @@ object NetworkModule {
     fun provideOkHttpClient(logging: Interceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(logging)
-            .addNetworkInterceptor { chain ->
-                val req = chain.request().newBuilder()
-                    .header("Connection", "close")
-                    .build()
-                chain.proceed(req)
-            }
-            .protocols(listOf(Protocol.HTTP_1_1))
             .retryOnConnectionFailure(true)
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
             .build()
 
     @Provides @Singleton

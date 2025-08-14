@@ -7,6 +7,5 @@ interface NoteRepository {
     suspend fun createNote(noteEntity: NoteEntity): Result<Unit>
     suspend fun deleteNote(noteEntity: NoteEntity): Result<Unit>
     suspend fun updateNote(noteEntity: NoteEntity): Result<Unit>
-    fun readAllNote() : Flow<List<NoteEntity>>
-    suspend fun refreshAllFromRemote(): Result<Unit>
+    suspend fun readAllNote() : List<NoteEntity>
 }

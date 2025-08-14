@@ -52,10 +52,10 @@ class CreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        observeCreateState()
     }
 
     private fun initView() {
+        Log.d("note", "${note?.title}")
         if (note != null) {
             binding.etTitle.setText(note!!.title)
             binding.etContent.setText(note!!.content)
@@ -87,26 +87,7 @@ class CreateFragment : Fragment() {
                     )
                 )
             }
-        }
-    }
-
-    private fun observeCreateState() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.createState.collect { state ->
-                    when (state) {
-                        is UiState.Loading -> Log.d("Create", "Loading")
-                        is UiState.Success -> {
-                            parentFragmentManager.popBackStack()
-                        }
-                        is UiState.Error -> {
-                            Toast.makeText(requireActivity(), state.message, Toast.LENGTH_SHORT).show()
-                            Log.d("Create", "Error: ${state.message}")
-                        }
-                        null -> Unit
-                    }
-                }
-            }
+            parentFragmentManager.popBackStack()
         }
     }
 

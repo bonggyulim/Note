@@ -8,3 +8,4 @@ fun _NoteEntity.toDomain(): NoteEntity = NoteEntity(id, title, content, createdD
 fun NoteEntity.toDto(): NoteResponse = NoteResponse(id, title, content, createdDate)
 fun NoteResponse.toLocal(): _NoteEntity = _NoteEntity(id, title, content, createdDate)
 fun NoteEntity.toLocal(): _NoteEntity = _NoteEntity(id, title, content, createdDate)
+fun NoteResponse.toDomain(): NoteEntity = NoteEntity(id, title, content, createdDate)
