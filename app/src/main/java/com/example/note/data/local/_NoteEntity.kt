@@ -3,9 +3,9 @@ package com.example.note.data.local
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "_NoteEntity")
 data class _NoteEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = false) val id: Int,
     val title: String,
     val content: String,
     val createdDate: String

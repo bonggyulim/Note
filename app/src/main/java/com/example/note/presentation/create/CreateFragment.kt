@@ -2,15 +2,22 @@ package com.example.note.presentation.create
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.note.databinding.FragmentCreateBinding
+import com.example.note.presentation.UiState
 import com.example.note.presentation.main.MainActivity.Companion.preferences
 import com.example.note.presentation.model.NoteModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,6 +52,7 @@ class CreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeCreateState()
     }
 
     private fun initView() {
@@ -79,8 +87,26 @@ class CreateFragment : Fragment() {
                     )
                 )
             }
+        }
+    }
 
-            parentFragmentManager.popBackStack()
+    private fun observeCreateState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.createState.collect { state ->
+                    when (state) {
+                        is UiState.Loading -> Log.d("Create", "Loading")
+                        is UiState.Success -> {
+                            parentFragmentManager.popBackStack()
+                        }
+                        is UiState.Error -> {
+                            Toast.makeText(requireActivity(), state.message, Toast.LENGTH_SHORT).show()
+                            Log.d("Create", "Error: ${state.message}")
+                        }
+                        null -> Unit
+                    }
+                }
+            }
         }
     }
 

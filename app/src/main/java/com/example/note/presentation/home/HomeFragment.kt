@@ -68,20 +68,26 @@ class HomeFragment : Fragment() {
                     is UiState.Success -> {
                         adapter.submitList(
                             uiState.data.map { it.toModel() }
-                                .sortedBy { it.createdDate }
-                        )
+                                .sortedByDescending { it.createdDate }
+                        ) {
+                            binding.rvNotes.layoutManager?.scrollToPosition(0)
+                        }
 
                         binding.btnDate.setOnClickListener {
                             adapter.submitList(
                                 uiState.data.map { it.toModel() }
-                                    .sortedBy { it.createdDate }
-                            )
+                                    .sortedByDescending { it.createdDate }
+                            ) {
+                                binding.rvNotes.layoutManager?.scrollToPosition(0)
+                            }
                         }
                         binding.btnAscending.setOnClickListener {
                             adapter.submitList(
                                 uiState.data.map { it.toModel() }
                                     .sortedBy { it.title }
-                            )
+                            ) {
+                                binding.rvNotes.layoutManager?.scrollToPosition(0)
+                            }
                         }
                     }
                     is UiState.Loading -> { /* 로딩 처리 */ }
