@@ -1,42 +1,47 @@
 package com.example.note.presentation.home
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.note.domain.entity.NoteEntity
 import com.example.note.domain.repository.NoteRepository
-import com.example.note.presentation.UiState
-import com.example.note.presentation.model.NoteModel
-import com.example.note.presentation.model.toEntity
+import com.example.note.presentation.create.model.NoteModel
+import com.example.note.presentation.create.model.toEntity
+import com.example.note.presentation.create.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val noteRepository: NoteRepository
-
 ): ViewModel() {
-    private val _readAllNoteUiState = MutableStateFlow<UiState<List<NoteEntity>>>(UiState.Loading)
-    val readAllNoteUiState : StateFlow<UiState<List<NoteEntity>>> = _readAllNoteUiState
+    private val _notes = MutableLiveData<List<NoteModel>>()
+    val notes: LiveData<List<NoteModel>> = _notes
+    var sort: Boolean = false
 
-
-    init {
-        fetchNotes()
-    }
-
-    fun fetchNotes() {
+    fun getAllNote() {
         viewModelScope.launch {
-            noteRepository.readAllNote()
-                .catch { e -> _readAllNoteUiState.value = UiState.Error(e.message ?: "Unknown error") }
-                .collect { notes -> _readAllNoteUiState.value = UiState.Success(notes) }
+            sort = false
+            val list = noteRepository.readAllNote().map { it.toModel() }
+            _notes.value = list
         }
     }
+
+    fun getAllNoteAscending() {
+        viewModelScope.launch {
+            sort = true
+            val list = noteRepository.readAllNote().map { it.toModel() }
+            _notes.value = list.sortedBy { it.title  }
+        }
+    }
+
+
     fun deleteNote(noteModel: NoteModel) {
         viewModelScope.launch {
             noteRepository.deleteNote(noteModel.toEntity())
+            val list = noteRepository.readAllNote().map { it.toModel() }
+            _notes.value = list
         }
     }
 
