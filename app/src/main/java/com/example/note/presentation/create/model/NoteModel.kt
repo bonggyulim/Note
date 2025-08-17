@@ -1,4 +1,4 @@
-package com.example.note.presentation.model
+package com.example.note.presentation.create.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

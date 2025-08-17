@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,6 +15,7 @@
         android:text="메모 추가"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,9 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:layout_marginTop="28dp"
-        android:hint="제목"
-        android:textSize="16sp"
         android:background="@drawable/radius"
+        android:hint="제목"
+        android:maxLength="20"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -38,37 +39,46 @@
         android:id="@+id/et_content"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="100dp"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
-        android:inputType="textMultiLine"
-        android:gravity="top"
-        android:lines="5"
-        android:hint="내용"
-        android:textSize="16sp"
         android:background="@drawable/radius"
+        android:gravity="top"
+        android:hint="내용"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:maxLength="200"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/et_title" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btn_cancel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
+        android:background="@drawable/radius_primary"
         android:text="취소"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_create"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btn_create"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
-        android:textSize="20sp"
+        android:background="@drawable/radius_primary"
         android:text="완료"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_cancel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

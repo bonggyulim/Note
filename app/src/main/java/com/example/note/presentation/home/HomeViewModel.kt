@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.note.domain.repository.NoteRepository
-import com.example.note.presentation.model.NoteModel
-import com.example.note.presentation.model.toEntity
-import com.example.note.presentation.model.toModel
+import com.example.note.presentation.create.model.NoteModel
+import com.example.note.presentation.create.model.toEntity
+import com.example.note.presentation.create.model.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

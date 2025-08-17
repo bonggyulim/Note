@@ -15,7 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.note.databinding.FragmentCreateBinding
 import com.example.note.presentation.UiState
 import com.example.note.presentation.main.MainActivity.Companion.preferences
-import com.example.note.presentation.model.NoteModel
+import com.example.note.presentation.create.model.NoteModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -52,6 +52,17 @@ class CreateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.successEvent.collect {
+                    parentFragmentManager.popBackStack()
+                }
+            }
+        }
     }
 
     private fun initView() {
@@ -87,7 +98,6 @@ class CreateFragment : Fragment() {
                     )
                 )
             }
-            parentFragmentManager.popBackStack()
         }
     }
 

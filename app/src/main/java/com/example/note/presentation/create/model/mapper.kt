@@ -1,4 +1,4 @@
-package com.example.note.presentation.model
+package com.example.note.presentation.create.model
 
 import com.example.note.domain.entity.NoteEntity
 
