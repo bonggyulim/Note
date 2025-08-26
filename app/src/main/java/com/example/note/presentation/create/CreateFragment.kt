@@ -3,18 +3,15 @@ package com.example.note.presentation.create
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.note.databinding.FragmentCreateBinding
-import com.example.note.presentation.UiState
-import com.example.note.presentation.main.MainActivity.Companion.preferences
 import com.example.note.presentation.create.model.NoteModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,7 +33,6 @@ class CreateFragment : Fragment() {
             note = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 arguments?.getParcelable("note", NoteModel::class.java)
             } else {
-                @Suppress("DEPRECATION")
                 arguments?.getParcelable("note")
             }
         }
@@ -84,6 +80,8 @@ class CreateFragment : Fragment() {
                         id = note!!.id,
                         title = binding.etTitle.text.toString(),
                         content = binding.etContent.text.toString(),
+                        summarize = "",
+                        sentiment = 0.0f,
                         createdDate = getFormattedDate()
                     )
                 )
@@ -91,9 +89,11 @@ class CreateFragment : Fragment() {
             else {
                 viewModel.createNote(
                     NoteModel(
-                        id = preferences.getId("note_id", 1),
+                        id = 0,
                         title = binding.etTitle.text.toString(),
                         content = binding.etContent.text.toString(),
+                        summarize = "",
+                        sentiment = 0.0f,
                         createdDate = getFormattedDate()
                     )
                 )
@@ -102,7 +102,7 @@ class CreateFragment : Fragment() {
     }
 
     private fun getFormattedDate() : String {
-        val format = SimpleDateFormat("yyyyMMddhhmmss", Locale.KOREA)
+        val format = SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREA)
         format.timeZone = TimeZone.getTimeZone("Asia/Seoul")
         return format.format(Date().time)
     }

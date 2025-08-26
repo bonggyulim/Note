@@ -7,6 +7,8 @@ fun NoteEntity.toModel(): NoteModel {
         id,
         title,
         content,
+        summarize,
+        sentiment,
         createdDate
     )
 }
@@ -16,6 +18,8 @@ fun NoteModel.toEntity(): NoteEntity {
         id,
         title,
         content,
+        summarize,
+        sentiment,
         createdDate
     )
 }
