@@ -51,14 +51,15 @@ class NoteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun readAllNote(): List<NoteEntity> = withContext(Dispatchers.IO) {
-        val response = api.getAll()
-        if (response.isSuccessful) {
-            response.body().orEmpty().map { it.toDomain() }
-        } else {
-            Log.e("API", "code=${response.code()}, error=${response.errorBody()?.string()}")
-            throw HttpException(response)
+    override suspend fun readAllNote(): Result<List<NoteEntity>> = withContext(Dispatchers.IO) {
+        runCatching {
+            val response = api.getAll()
+            if (response.isSuccessful) {
+                response.body().orEmpty().map { it.toDomain() }
+            } else {
+                Log.e("API", "code=${response.code()}, error=${response.errorBody()?.string()}")
+                throw HttpException(response)
+            }
         }
-
     }
 }
