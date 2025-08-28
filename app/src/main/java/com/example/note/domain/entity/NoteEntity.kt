@@ -5,6 +5,6 @@ data class NoteEntity(
     val title: String = "",
     val content: String = "",
     val summarize: String = "",
-    val sentiment: Float = 0.0f,
+    val sentiment: Double = 0.5,
     val createdDate: String = ""
 )

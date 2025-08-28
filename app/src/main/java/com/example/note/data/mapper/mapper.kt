@@ -6,7 +6,7 @@ import com.example.note.data.remote.NoteResponse
 import com.example.note.domain.entity.NoteEntity
 
 fun NoteEntity.toRequest(): NoteRequest = NoteRequest(title = title, content = content, createdDate = createdDate)
-fun NoteResponse.toDomain(): NoteEntity = NoteEntity(id, title, content,summarize, sentiment, createdDate)
+fun NoteResponse.toDomain(): NoteEntity = NoteEntity(id, title, content,summarize?: "", sentiment?: 0.5, createdDate)
 
 fun NoteEntity.toLocal(): _NoteEntity = _NoteEntity(id, title, content, createdDate)
 fun _NoteEntity.toDomain(): NoteEntity = NoteEntity(id, title, content, createdDate)

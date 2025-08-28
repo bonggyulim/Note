@@ -4,7 +4,7 @@ data class NoteResponse(
     val id: Int = 0,
     val title: String = "",
     val content: String = "",
-    val summarize: String = "",
-    val sentiment: Float = 0.0f,
+    val summarize: String? = null,
+    val sentiment: Double? = null,
     val createdDate: String = ""
 )

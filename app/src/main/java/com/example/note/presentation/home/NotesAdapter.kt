@@ -1,5 +1,6 @@
 package com.example.note.presentation.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,10 +51,14 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
             binding.ivEdit.setOnClickListener { editClick?.editClick(item) }
             binding.ivDelete.setOnClickListener { deleteClick?.deleteClick(item) }
 
-            val score = item.sentiment ?: 0.5f  // 0~1 가정
-            val colorRes = when {
-                score >= 0.6f -> R.color.sentiment_positive
-                score <= 0.4f -> R.color.sentiment_negative
+            val score = item.sentiment
+            val colorRes = when (score) {
+                0.0 -> R.color.sentiment_neutral
+                in 0.8..1.0 -> R.color.sentiment_very_positive
+                in 0.6..0.8 -> R.color.sentiment_positive
+                in 0.4..0.6 -> R.color.sentiment_neutral
+                in 0.2..0.4 -> R.color.sentiment_negative
+                in 0.0..0.2 -> R.color.sentiment_very_negative
                 else -> R.color.sentiment_neutral
             }
             val bgColor = ContextCompat.getColor(itemView.context, colorRes)

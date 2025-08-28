@@ -9,6 +9,6 @@ data class NoteModel(
     val title: String,
     val content: String,
     val summarize: String,
-    val sentiment: Float,
+    val sentiment: Double,
     val createdDate: String
 ): Parcelable

@@ -47,14 +47,15 @@ class CreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         observeViewModel()
+        initView()
     }
 
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.successEvent.collect {
+                    Log.d("CreateFrag", "collect success -> pop")
                     parentFragmentManager.popBackStack()
                 }
             }
@@ -81,7 +82,7 @@ class CreateFragment : Fragment() {
                         title = binding.etTitle.text.toString(),
                         content = binding.etContent.text.toString(),
                         summarize = "",
-                        sentiment = 0.0f,
+                        sentiment = 0.0,
                         createdDate = getFormattedDate()
                     )
                 )
@@ -93,7 +94,7 @@ class CreateFragment : Fragment() {
                         title = binding.etTitle.text.toString(),
                         content = binding.etContent.text.toString(),
                         summarize = "",
-                        sentiment = 0.0f,
+                        sentiment = 0.0,
                         createdDate = getFormattedDate()
                     )
                 )
