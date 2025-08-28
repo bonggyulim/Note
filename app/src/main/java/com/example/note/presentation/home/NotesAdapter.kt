@@ -1,6 +1,5 @@
 package com.example.note.presentation.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,11 +15,9 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
 
     interface EditClick { fun editClick(noteModel: NoteModel) }
     interface DeleteClick { fun deleteClick(noteModel: NoteModel) }
-    interface NoteClick { fun noteClick(noteModel: NoteModel)}
 
     var editClick: EditClick? = null
     var deleteClick: DeleteClick? = null
-    var noteClick: NoteClick? = null
 
     companion object {
         val DiffCallback = object : DiffUtil.ItemCallback<NoteModel>() {
@@ -30,7 +27,7 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
     }
 
     class Holder(private val binding: RecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: NoteModel, editClick: EditClick?, deleteClick: DeleteClick?, noteClick: NoteClick?) {
+        fun bind(item: NoteModel, editClick: EditClick?, deleteClick: DeleteClick?) {
             binding.title.text = item.title
             binding.content.text = item.content
             binding.summarize.text = item.summarize
@@ -73,6 +70,6 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(getItem(position), editClick, deleteClick, noteClick)
+        holder.bind(getItem(position), editClick, deleteClick)
     }
 }
