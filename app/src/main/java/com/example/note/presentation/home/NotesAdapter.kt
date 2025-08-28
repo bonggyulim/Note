@@ -15,11 +15,9 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
 
     interface EditClick { fun editClick(noteModel: NoteModel) }
     interface DeleteClick { fun deleteClick(noteModel: NoteModel) }
-    interface NoteClick { fun noteClick(noteModel: NoteModel)}
 
     var editClick: EditClick? = null
     var deleteClick: DeleteClick? = null
-    var noteClick: NoteClick? = null
 
     companion object {
         val DiffCallback = object : DiffUtil.ItemCallback<NoteModel>() {
@@ -29,7 +27,7 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
     }
 
     class Holder(private val binding: RecyclerviewBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: NoteModel, editClick: EditClick?, deleteClick: DeleteClick?, noteClick: NoteClick?) {
+        fun bind(item: NoteModel, editClick: EditClick?, deleteClick: DeleteClick?) {
             binding.title.text = item.title
             binding.content.text = item.content
             binding.summarize.text = item.summarize
@@ -50,10 +48,14 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
             binding.ivEdit.setOnClickListener { editClick?.editClick(item) }
             binding.ivDelete.setOnClickListener { deleteClick?.deleteClick(item) }
 
-            val score = item.sentiment ?: 0.5f  // 0~1 가정
-            val colorRes = when {
-                score >= 0.6f -> R.color.sentiment_positive
-                score <= 0.4f -> R.color.sentiment_negative
+            val score = item.sentiment
+            val colorRes = when (score) {
+                0.0 -> R.color.sentiment_neutral
+                in 0.8..1.0 -> R.color.sentiment_very_positive
+                in 0.6..0.8 -> R.color.sentiment_positive
+                in 0.4..0.6 -> R.color.sentiment_neutral
+                in 0.2..0.4 -> R.color.sentiment_negative
+                in 0.0..0.2 -> R.color.sentiment_very_negative
                 else -> R.color.sentiment_neutral
             }
             val bgColor = ContextCompat.getColor(itemView.context, colorRes)
@@ -68,6 +70,6 @@ class NotesAdapter : ListAdapter<NoteModel, NotesAdapter.Holder>(DiffCallback) {
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(getItem(position), editClick, deleteClick, noteClick)
+        holder.bind(getItem(position), editClick, deleteClick)
     }
 }
